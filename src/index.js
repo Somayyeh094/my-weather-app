@@ -7,8 +7,14 @@ function updateWeatherInfo(response) {
   let iconDesription = response.data.condition.icon;
   if (iconDesription.includes("day")) {
     document.body.style.backgroundColor = "#5D9FD5";
+    document.body.style.backgroundImage = "url('images/sun.svg')";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "top-right";
   } else {
     document.body.style.backgroundColor = "#123459";
+    document.body.style.backgroundImage = "url('images/moon-6694.svg')";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "top-right";
   }
   let tempratureElement = document.querySelector("#weather-app-temp");
   let descriptionElement = document.querySelector("#weather-description");
