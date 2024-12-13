@@ -10,12 +10,14 @@ function updateWeatherInfo(response) {
   let windElement = document.querySelector("#weather-wind");
   let cityElement = document.querySelector("#city-display");
   let timeElement = document.querySelector("#weather-time");
+  let iconElement = document.querySelector("#weather-app-icon");
   cityElement.innerHTML = response.data.city;
   tempratureElement.innerHTML = Math.round(tempraturevalue);
   descriptionElement.innerHTML = description;
   humidtiyElement.innerHTML = `${Math.round(humidityvalue)}%`;
   windElement.innerHTML = `${Math.round(windvalue)}km/h`;
   timeElement.innerHTML = formatTime(timevalue);
+  iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-img-icon"/>`;
 }
 
 function formatTime(timevalue) {
