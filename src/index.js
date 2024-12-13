@@ -4,6 +4,12 @@ function updateWeatherInfo(response) {
   let humidityvalue = response.data.temperature.humidity;
   let windvalue = response.data.wind.speed;
   let timevalue = new Date(response.data.time * 1000);
+  let iconDesription = response.data.condition.icon;
+  if (iconDesription.includes("day")) {
+    document.body.style.backgroundColor = "#5D9FD5";
+  } else {
+    document.body.style.backgroundColor = "#123459";
+  }
   let tempratureElement = document.querySelector("#weather-app-temp");
   let descriptionElement = document.querySelector("#weather-description");
   let humidtiyElement = document.querySelector("#weather-humidity");
