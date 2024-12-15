@@ -1,3 +1,4 @@
+//getting data from API and replacing in HTML, also changing HTML bg color based on API weather icon
 function updateWeatherInfo(response) {
   let tempraturevalue = response.data.temperature.current;
   let description = response.data.condition.description;
@@ -31,7 +32,7 @@ function updateWeatherInfo(response) {
   timeElement.innerHTML = formatTime(timevalue);
   iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-img-icon"/>`;
 }
-
+//formating API time to day hours:minutes
 function formatTime(timevalue) {
   let minutes = timevalue.getMinutes();
   let hours = timevalue.getHours();
@@ -42,7 +43,7 @@ function formatTime(timevalue) {
     "Wednesday",
     "Thursday",
     "Friday",
-    "saturday",
+    "Saturday",
   ];
   let day = days[timevalue.getDay()];
   if (minutes < 10) {
@@ -50,20 +51,49 @@ function formatTime(timevalue) {
   }
   return `${day} ${hours}:${minutes}`;
 }
+//formating forecast API time to days
+function forecastDayFormat(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "sat"];
+
+  return days[date.getDay()];
+}
+//getting weather forecasting  data
+function forecastDisplay(response) {
+  let forecast = "";
+  response.data.daily.forEach(function forecastformat(day, index) {
+    if (index < 5) {
+      forecast += `<div class="weather-forecast-date"><div class="weather-forecast-day">${forecastDayFormat(
+        day.time
+      )}</div>
+            <div class="weather-forecast-icon"><img src="${
+              day.condition.icon_url
+            }" class="icon-forecast"/></div>
+            <div class="weather-forecast-temps">
+              <span class="min">${Math.round(day.temperature.minimum)}°</span>
+              <span class="max">${Math.round(day.temperature.maximum)}°</span>
+            </div> </div>`;
+    }
+  });
+  let forecastElement = document.querySelector("#weather-forecast");
+  forecastElement.innerHTML = forecast;
+}
+//getting the insterest data that a user wanted
 function searchCity(city) {
   let apiKey = "71c9o8ef0370bd39a326b41301fb04bt";
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+  let apiUrlforecast = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
   axios.get(apiUrl).then(updateWeatherInfo);
+  axios.get(apiUrlforecast).then(forecastDisplay);
 }
-
+// getting HTML input that a user submit
 function handleSearchForm(event) {
   event.preventDefault();
   let searchInput = document.querySelector("#search-form-input");
 
   searchCity(searchInput.value);
 }
-
 let searchFormElement = document.querySelector("#search-form");
 searchFormElement.addEventListener("submit", handleSearchForm);
-//document.body.style.backgroundColor = rndCol;
+//
 searchCity("Mashhad");
